@@ -16,7 +16,7 @@
 # all copies or substantial portions of the Software.
 #
 #################################################################################
-"""	@version	19.0.1.0.0
+"""	@version	19.0.1.0.1
 	@owner  Hadron for Business
 	@author Hadron for Business sp. z o.o.
 	@date   2026.10.07
@@ -121,14 +121,14 @@ class BillApproval(models.Model):
         for task in self:
             if not task.can_decide:
                 raise UserError(_("Only %(user)s can decide on this approval of bill %(bill)s.",
-                                  user=task.user_id.name, bill=task.move_id.display_name))
+                                  user=task.user_id.name, bill=task.sudo().move_id.display_name))
 
     def _approve(self, description=None):
         self._check_can_decide()
         for task in self:
             text = description if description is not None else task.description
             if task.description_required and is_html_empty(text):
-                raise UserError(_("Please describe the expense before approving bill %s.", task.move_id.display_name))
+                raise UserError(_("Please describe the expense before approving bill %s.", task.sudo().move_id.display_name))
             task.sudo().write({
                 'state': 'approved', 'description': text,
                 'decided_by_id': self.env.uid, 'decided_on': fields.Datetime.now(),
