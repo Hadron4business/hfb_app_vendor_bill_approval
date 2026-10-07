@@ -40,7 +40,6 @@ class BillApproval(models.Model):
     _description = "Vendor Bill Approval Task"
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
-    _rec_name = 'move_id'
 
     move_id = fields.Many2one('account.move', string="Bill", required=True, index=True, ondelete='cascade')
     company_id = fields.Many2one(related='move_id.company_id', store=True)
@@ -90,6 +89,12 @@ class BillApproval(models.Model):
             is_pdf = attachment and attachment.mimetype == 'application/pdf'
             task.bill_pdf = attachment.datas if is_pdf else False
             task.bill_pdf_name = attachment.name if is_pdf else False
+
+    @api.depends('move_id', 'user_id')
+    def _compute_display_name(self):
+        # Approvers usually cannot read the bill itself: build the name as superuser.
+        for task in self:
+            task.display_name = "%s - %s" % (task.sudo().move_id.display_name or '', task.user_id.name or '')
 
     @api.depends_context('uid')
     @api.depends('state', 'user_id')
