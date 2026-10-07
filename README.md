@@ -34,4 +34,4 @@ Approval rules route vendor bills to approvers, who describe and approve or reje
 
 ## Status
 
-Odoo 20 build. Missing before publication: tests on 17/18/19/20, icon (also used by the Bill Approvals menu), banner.
+Odoo 20 build. Tested on the Odoo.sh test instances (automated RPC tests and manual tests, 2026-10-07). Missing before publication: icon, banner.
