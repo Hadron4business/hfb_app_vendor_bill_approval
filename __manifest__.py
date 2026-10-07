@@ -37,7 +37,7 @@ bill shows the status of every approval, cannot be posted until all
 approvers have approved it, and the accountant is notified when everything
 is done.
 """,
-    'version': "19.0.1.0.2",
+    'version': "19.0.1.0.3",
     'author': "Hadron for Business sp. z o.o.",
     'website': "http://hadronforbusiness.com",
     'license': "OPL-1",
