@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="bill_approval_view_tree" model="ir.ui.view">
+        <field name="name">bill.approval.tree</field>
+        <field name="model">bill.approval</field>
+        <field name="arch" type="xml">
+            <tree string="Bill Approvals" create="0" decoration-muted="state != 'pending'">
+                <field name="bill_name"/>
+                <field name="partner_id"/>
+                <field name="bill_ref" optional="show"/>
+                <field name="bill_date" optional="show"/>
+                <field name="amount_total" sum="Total"/>
+                <field name="rule_name" optional="show"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="state" widget="badge" decoration-warning="state == 'pending'"
+                       decoration-success="state == 'approved'" decoration-danger="state == 'rejected'"/>
+                <field name="currency_id" column_invisible="True"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="bill_approval_view_form" model="ir.ui.view">
+        <field name="name">bill.approval.form</field>
+        <field name="model">bill.approval</field>
+        <field name="arch" type="xml">
+            <form string="Bill Approval" create="0">
+                <header>
+                    <field name="can_decide" invisible="1"/>
+                    <button name="action_open_decision" type="object" string="Approve" class="oe_highlight"
+                            context="{'bill_approval_mode': 'approve'}" invisible="not can_decide" data-hotkey="v"/>
+                    <button name="action_open_decision" type="object" string="Reject"
+                            context="{'bill_approval_mode': 'reject'}" invisible="not can_decide"/>
+                    <button name="action_open_decision" type="object" string="Hand Over"
+                            context="{'bill_approval_mode': 'handover'}" invisible="state != 'pending'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="partner_id" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="bill_name"/>
+                            <field name="bill_ref"/>
+                            <field name="bill_date"/>
+                            <field name="bill_due_date"/>
+                        </group>
+                        <group>
+                            <field name="amount_untaxed"/>
+                            <field name="amount_total"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="rule_name" readonly="1"/>
+                            <field name="user_id" readonly="1" widget="many2one_avatar_user"/>
+                            <field name="requester_id" readonly="1" widget="many2one_avatar_user"/>
+                        </group>
+                    </group>
+                    <field name="bill_lines_html" readonly="1" nolabel="1"/>
+                    <group string="Expense Description">
+                        <field name="description" nolabel="1" colspan="2" readonly="state != 'pending'"
+                               placeholder="What is this expense for?"/>
+                    </group>
+                    <group invisible="state != 'rejected'">
+                        <field name="rejection_reason" readonly="1"/>
+                    </group>
+                    <group invisible="state == 'pending'">
+                        <field name="decided_by_id"/>
+                        <field name="decided_on"/>
+                    </group>
+                    <group invisible="not handover_note">
+                        <field name="handover_note"/>
+                    </group>
+                    <field name="bill_pdf_name" invisible="1"/>
+                    <field name="bill_pdf" widget="pdf_viewer" readonly="1" nolabel="1" invisible="not bill_pdf"/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="bill_approval_view_search" model="ir.ui.view">
+        <field name="name">bill.approval.search</field>
+        <field name="model">bill.approval</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="bill_name"/>
+                <field name="user_id"/>
+                <filter name="mine" string="My Approvals" domain="[('user_id', '=', uid)]"/>
+                <filter name="pending" string="Waiting" domain="[('state', '=', 'pending')]"/>
+                <filter name="approved" string="Approved" domain="[('state', '=', 'approved')]"/>
+                <filter name="rejected" string="Rejected" domain="[('state', '=', 'rejected')]"/>
+                <group>
+                    <filter name="group_user" string="Approver" context="{'group_by': 'user_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="bill_approval_action_mine" model="ir.actions.act_window">
+        <field name="name">Bills to Approve</field>
+        <field name="res_model">bill.approval</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_mine': 1, 'search_default_pending': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No vendor bill is waiting for you</p>
+        </field>
+    </record>
+
+    <record id="bill_approval_action_all" model="ir.actions.act_window">
+        <field name="name">Bill Approvals</field>
+        <field name="res_model">bill.approval</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_pending': 1}</field>
+    </record>
+
+    <menuitem id="menu_bill_approval_root" name="Bill Approvals" sequence="70"
+              groups="group_bill_approver"/>
+    <menuitem id="menu_bill_approval_mine" name="To Approve" parent="menu_bill_approval_root"
+              action="bill_approval_action_mine" sequence="10"/>
+    <menuitem id="menu_bill_approval_all" name="All Approvals" parent="menu_bill_approval_root"
+              action="bill_approval_action_all" sequence="20" groups="account.group_account_invoice"/>
+    <menuitem id="menu_bill_approval_accounting" name="Bill Approvals" parent="account.menu_finance_payables"
+              action="bill_approval_action_all" sequence="5" groups="account.group_account_invoice"/>
+
+</odoo>

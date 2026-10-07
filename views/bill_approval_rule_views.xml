@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="bill_approval_rule_view_tree" model="ir.ui.view">
+        <field name="name">bill.approval.rule.tree</field>
+        <field name="model">bill.approval.rule</field>
+        <field name="arch" type="xml">
+            <tree string="Bill Approval Rules">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="min_amount"/>
+                <field name="partner_ids" widget="many2many_tags"/>
+                <field name="user_ids" widget="many2many_avatar_user"/>
+                <field name="description_required"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="currency_id" column_invisible="True"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="bill_approval_rule_view_form" model="ir.ui.view">
+        <field name="name">bill.approval.rule.form</field>
+        <field name="model">bill.approval.rule</field>
+        <field name="arch" type="xml">
+            <form string="Bill Approval Rule">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="e.g. IT expenses, Above 10,000"/>
+                            <field name="min_amount"/>
+                            <field name="partner_ids" widget="many2many_tags" placeholder="All vendors"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="user_ids" widget="many2many_avatar_user"/>
+                            <field name="description_required"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="bill_approval_rule_action" model="ir.actions.act_window">
+        <field name="name">Bill Approval Rules</field>
+        <field name="res_model">bill.approval.rule</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Who approves which vendor bills?</p>
+            <p>For example: every bill to the office manager, IT vendors to the IT manager, bills from 10,000 to the CFO.
+               Enable the feature in Invoicing settings.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_bill_approval_rule" name="Bill Approval Rules"
+              parent="account.menu_finance_configuration" action="bill_approval_rule_action"
+              groups="account.group_account_manager" sequence="40"/>
+
+</odoo>

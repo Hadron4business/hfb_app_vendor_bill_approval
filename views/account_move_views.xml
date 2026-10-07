@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_move_form_bill_approval" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.bill.approval</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='button_draft']" position="after">
+                <field name="bill_approval_enabled" invisible="1"/>
+                <field name="bill_approval_can_decide" invisible="1"/>
+                <button name="action_bill_approval_request" type="object" string="Request Approval"
+                        invisible="not bill_approval_enabled or state != 'draft' or move_type not in ('in_invoice', 'in_refund') or bill_approval_state in ('pending', 'approved')"/>
+                <button name="action_bill_approval_decide" type="object" string="Approve" class="oe_highlight"
+                        context="{'bill_approval_mode': 'approve'}" invisible="not bill_approval_can_decide"/>
+                <button name="action_bill_approval_decide" type="object" string="Reject"
+                        context="{'bill_approval_mode': 'reject'}" invisible="not bill_approval_can_decide"/>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_title')]" position="before">
+                <field name="bill_approval_state" invisible="1"/>
+                <widget name="web_ribbon" title="Waiting for Approval" bg_color="text-bg-warning"
+                        invisible="bill_approval_state != 'pending' or state != 'draft'"/>
+                <widget name="web_ribbon" title="Approval Rejected" bg_color="text-bg-danger"
+                        invisible="bill_approval_state != 'rejected' or state != 'draft'"/>
+            </xpath>
+            <xpath expr="//page[@id='other_tab']" position="after">
+                <page id="bill_approval_tab" name="bill_approval" string="Approvals"
+                      invisible="move_type not in ('in_invoice', 'in_refund') or (not bill_approval_ids and not bill_approval_enabled)">
+                    <div class="mb-2" invisible="state != 'draft'">
+                        <button name="action_bill_approval_add" type="object" string="Ask Someone Else"
+                                class="btn-link" icon="fa-user-plus"/>
+                    </div>
+                    <field name="bill_approval_ids" readonly="1">
+                        <tree decoration-warning="state == 'pending'" decoration-success="state == 'approved'"
+                              decoration-danger="state == 'rejected'">
+                            <field name="rule_name"/>
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                            <field name="state" widget="badge" decoration-warning="state == 'pending'"
+                                   decoration-success="state == 'approved'" decoration-danger="state == 'rejected'"/>
+                            <field name="description"/>
+                            <field name="rejection_reason" optional="show"/>
+                            <field name="decided_on"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_in_invoice_bill_tree_approval" model="ir.ui.view">
+        <field name="name">account.move.tree.inherit.bill.approval</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_in_invoice_bill_tree"/>
+        <field name="arch" type="xml">
+            <field name="amount_residual_signed" position="after">
+                <field name="bill_approval_state" optional="show" widget="badge"
+                       decoration-warning="bill_approval_state == 'pending'" decoration-success="bill_approval_state == 'approved'"
+                       decoration-danger="bill_approval_state == 'rejected'" invisible="bill_approval_state == 'none'"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>
