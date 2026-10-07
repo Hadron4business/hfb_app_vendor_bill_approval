@@ -3,7 +3,6 @@
 
     <record id="group_bill_approver" model="res.groups">
         <field name="name">Vendor Bill Approver</field>
-        <field name="category_id" ref="base.module_category_hidden"/>
     </record>
 
     <record id="account.group_account_invoice" model="res.groups">

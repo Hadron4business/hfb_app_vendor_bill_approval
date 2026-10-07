@@ -16,7 +16,7 @@
 # all copies or substantial portions of the Software.
 #
 #################################################################################
-"""	@version	18.0.1.0.0
+"""	@version	19.0.1.0.0
 	@owner  Hadron for Business
 	@author Hadron for Business sp. z o.o.
 	@date   2026.10.07
@@ -68,7 +68,7 @@ class BillApprovalWizard(models.TransientModel):
                 'move_id': self.move_id.id, 'user_id': self.user_id.id,
                 'rule_name': self.note or _("Requested manually"), 'description_required': True,
             })
-            self.env.ref('hfb_app_vendor_bill_approval.group_bill_approver').sudo().write({'users': [(4, self.user_id.id)]})
+            self.env.ref('hfb_app_vendor_bill_approval.group_bill_approver').sudo().write({'user_ids': [(4, self.user_id.id)]})
             self.move_id.message_post(body=_("Approval requested from %s.", self.user_id.name))
         return {'type': 'ir.actions.act_window_close'}
 

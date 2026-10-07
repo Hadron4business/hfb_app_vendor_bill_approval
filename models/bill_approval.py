@@ -16,7 +16,7 @@
 # all copies or substantial portions of the Software.
 #
 #################################################################################
-"""	@version	18.0.1.0.0
+"""	@version	19.0.1.0.0
 	@owner  Hadron for Business
 	@author Hadron for Business sp. z o.o.
 	@date   2026.10.07
@@ -158,7 +158,7 @@ class BillApproval(models.Model):
                 'user_id': user.id,
                 'handover_note': "\n".join(filter(None, [task.handover_note, line])),
             })
-            self.env.ref('hfb_app_vendor_bill_approval.group_bill_approver').sudo().write({'users': [(4, user.id)]})
+            self.env.ref('hfb_app_vendor_bill_approval.group_bill_approver').sudo().write({'user_ids': [(4, user.id)]})
             task.sudo()._schedule_activity()
             task.move_id.sudo().message_post(body=_("Approval handed over: %s", line))
 

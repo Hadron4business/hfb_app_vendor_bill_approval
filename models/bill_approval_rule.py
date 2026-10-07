@@ -16,7 +16,7 @@
 # all copies or substantial portions of the Software.
 #
 #################################################################################
-"""	@version	18.0.1.0.0
+"""	@version	19.0.1.0.0
 	@owner  Hadron for Business
 	@author Hadron for Business sp. z o.o.
 	@date   2026.10.07
@@ -74,9 +74,9 @@ class BillApprovalRule(models.Model):
     def _grant_approver_group(self):
         """Approvers need the approver group to see their tasks and the menu."""
         group = self.env.ref('hfb_app_vendor_bill_approval.group_bill_approver')
-        users = self.user_ids - group.sudo().users
+        users = self.user_ids - group.sudo().user_ids
         if users:
-            group.sudo().write({'users': [(4, user.id) for user in users]})
+            group.sudo().write({'user_ids': [(4, user.id) for user in users]})
 
     def _matches(self, move):
         self.ensure_one()
