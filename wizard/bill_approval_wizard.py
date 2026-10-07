@@ -16,7 +16,7 @@
 # all copies or substantial portions of the Software.
 #
 #################################################################################
-"""	@version	20.0.1.0.2
+"""	@version	20.0.1.0.3
 	@owner  Hadron for Business
 	@author Hadron for Business sp. z o.o.
 	@date   2026.10.07
@@ -26,7 +26,7 @@
 	reason), handing over to another approver and asking an additional person
 	for approval.
 """
-from odoo import _, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -45,6 +45,7 @@ class BillApprovalWizard(models.TransientModel):
     user_id = fields.Many2one('res.users', string="New Approver", domain="[('share', '=', False)]")
     note = fields.Text(string="Note")
 
+    @api.depends('task_ids.description_required')
     def _compute_description_required(self):
         for wizard in self:
             wizard.description_required = any(wizard.task_ids.mapped('description_required'))
