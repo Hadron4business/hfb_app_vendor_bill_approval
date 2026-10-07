@@ -73,11 +73,7 @@
                     <field name="bill_pdf_name" invisible="1"/>
                     <field name="bill_pdf" widget="pdf_viewer" readonly="1" nolabel="1" invisible="not bill_pdf"/>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
+                <chatter/>
             </form>
         </field>
     </record>
