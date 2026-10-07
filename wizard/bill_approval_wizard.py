@@ -16,7 +16,7 @@
 # all copies or substantial portions of the Software.
 #
 #################################################################################
-"""	@version	17.0.1.0.0
+"""	@version	17.0.1.0.1
 	@owner  Hadron for Business
 	@author Hadron for Business sp. z o.o.
 	@date   2026.10.07
@@ -51,6 +51,8 @@ class BillApprovalWizard(models.TransientModel):
 
     def action_confirm(self):
         self.ensure_one()
+        if self.mode in ('approve', 'reject', 'handover') and not self.task_ids:
+            raise UserError(_("This approval is not yours to decide."))
         if self.mode == 'approve':
             self.task_ids._approve(self.description)
         elif self.mode == 'reject':
