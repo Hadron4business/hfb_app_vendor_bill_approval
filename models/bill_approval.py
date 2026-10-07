@@ -16,7 +16,7 @@
 # all copies or substantial portions of the Software.
 #
 #################################################################################
-"""	@version	20.0.1.0.1
+"""	@version	20.0.1.0.2
 	@owner  Hadron for Business
 	@author Hadron for Business sp. z o.o.
 	@date   2026.10.07
@@ -88,7 +88,7 @@ class BillApproval(models.Model):
             ) % (_("Description"), _("Quantity"), _("Untaxed"), Markup(rows)) if rows else False
             attachment = move.message_main_attachment_id
             is_pdf = attachment and attachment.mimetype == 'application/pdf'
-            task.bill_pdf = attachment.datas if is_pdf else False
+            task.bill_pdf = attachment.raw if is_pdf else False
             task.bill_pdf_name = attachment.name if is_pdf else False
 
     @api.depends('move_id', 'user_id')
