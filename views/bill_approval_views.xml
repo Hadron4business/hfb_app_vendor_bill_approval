@@ -5,7 +5,7 @@
         <field name="name">bill.approval.tree</field>
         <field name="model">bill.approval</field>
         <field name="arch" type="xml">
-            <tree string="Bill Approvals" create="0" decoration-muted="state != 'pending'">
+            <list string="Bill Approvals" create="0" decoration-muted="state != 'pending'">
                 <field name="bill_name"/>
                 <field name="partner_id"/>
                 <field name="bill_ref" optional="show"/>
@@ -16,7 +16,7 @@
                 <field name="state" widget="badge" decoration-warning="state == 'pending'"
                        decoration-success="state == 'approved'" decoration-danger="state == 'rejected'"/>
                 <field name="currency_id" column_invisible="True"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -105,7 +105,7 @@
     <record id="bill_approval_action_mine" model="ir.actions.act_window">
         <field name="name">Bills to Approve</field>
         <field name="res_model">bill.approval</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="context">{'search_default_mine': 1, 'search_default_pending': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">No vendor bill is waiting for you</p>
@@ -115,7 +115,7 @@
     <record id="bill_approval_action_all" model="ir.actions.act_window">
         <field name="name">Bill Approvals</field>
         <field name="res_model">bill.approval</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="context">{'search_default_pending': 1}</field>
     </record>
 
