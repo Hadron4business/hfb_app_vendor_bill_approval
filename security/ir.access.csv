@@ -1,0 +1,9 @@
+id,name,model_id,group_id/id,operation,domain
+access_bill_approval_approver,bill.approval approver (own tasks),bill.approval,group_bill_approver,r,"[('user_id', '=', user.id)]"
+access_bill_approval_accountant,bill.approval accountant,bill.approval,account.group_account_invoice,cru,
+access_bill_approval_manager,bill.approval manager,bill.approval,account.group_account_manager,crud,
+access_bill_approval_rule_user,bill.approval.rule user,bill.approval.rule,account.group_account_invoice,r,
+access_bill_approval_rule_manager,bill.approval.rule manager,bill.approval.rule,account.group_account_manager,crud,
+access_bill_approval_wizard_user,bill.approval.wizard user,bill.approval.wizard,group_bill_approver,crud,
+bill_approval_company_rule,bill.approval multi-company,bill.approval,,crud,"[('company_id', 'in', company_ids)]"
+bill_approval_rule_company_rule,bill.approval.rule multi-company,bill.approval.rule,,crud,"[('company_id', 'in', company_ids)]"

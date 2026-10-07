@@ -37,7 +37,7 @@ bill shows the status of every approval, cannot be posted until all
 approvers have approved it, and the accountant is notified when everything
 is done.
 """,
-    'version': "19.0.1.0.0",
+    'version': "20.0.1.0.0",
     'author': "Hadron for Business sp. z o.o.",
     'website': "http://hadronforbusiness.com",
     'license': "OPL-1",
@@ -47,7 +47,7 @@ is done.
     ],
     'data': [
         'security/bill_approval_security.xml',
-        'security/ir.model.access.csv',
+        'security/ir.access.csv',
         'data/mail_activity_type_data.xml',
         'wizard/bill_approval_wizard_views.xml',
         'views/bill_approval_rule_views.xml',
