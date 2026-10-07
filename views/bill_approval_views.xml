@@ -120,6 +120,7 @@
     </record>
 
     <menuitem id="menu_bill_approval_root" name="Bill Approvals" sequence="70"
+              web_icon="hfb_app_vendor_bill_approval,static/description/icon.png"
               groups="group_bill_approver"/>
     <menuitem id="menu_bill_approval_mine" name="To Approve" parent="menu_bill_approval_root"
               action="bill_approval_action_mine" sequence="10"/>

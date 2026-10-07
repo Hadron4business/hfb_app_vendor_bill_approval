@@ -34,4 +34,4 @@ Approval rules route vendor bills to approvers, who describe and approve or reje
 
 ## Status
 
-Odoo 17 build. Tested on the Odoo.sh test instances (automated RPC tests and manual tests, 2026-10-07). Missing before publication: icon, banner.
+Odoo 17 build. Tested on the Odoo.sh test instances (automated RPC tests and manual tests, 2026-10-07). Icon and banner included - ready for publication.
