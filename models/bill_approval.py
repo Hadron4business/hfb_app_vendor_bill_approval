@@ -40,6 +40,7 @@ class BillApproval(models.Model):
     _description = "Vendor Bill Approval Task"
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
+    _mail_post_access = 'read'  # approvers only read their tasks but may discuss them in the chatter
 
     move_id = fields.Many2one('account.move', string="Bill", required=True, index=True, ondelete='cascade')
     company_id = fields.Many2one(related='move_id.company_id', store=True)
